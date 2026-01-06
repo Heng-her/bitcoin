@@ -1,0 +1,61 @@
+{
+	"pages": [{
+			"path": "pages/index/index"
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/profile/profile"
+		},
+		{
+			"path": "pages/market/market"
+		},
+		{
+			"path": "pages/futures/futures"
+		},
+		{
+			"path": "pages/wallet/wallet",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}
+	],
+
+	"globalStyle": {
+		"navigationStyle": "custom",
+		"navigationBarTextStyle": "black",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+
+	"tabBar": {
+		"color": "#9ca3af",
+		"selectedColor": "#22c55e",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "/static/tab/home.png",
+			"selectedIconPath": "/static/tab/home_active.png",
+			"text": "Home"
+		}, {
+			"pagePath": "pages/market/market",
+			"iconPath": "/static/tab/market.png",
+			"selectedIconPath": "/static/tab/market_active.png",
+			"text": "Market"
+		}, {
+			"pagePath": "pages/futures/futures",
+			"iconPath": "/static/tab/futures.png",
+			"selectedIconPath": "/static/tab/futures_active.png",
+			"text": "Futures"
+		}, {
+			"pagePath": "pages/wallet/wallet",
+			"iconPath": "/static/tab/wallet.png",
+			"selectedIconPath": "/static/tab/wallet_active.png",
+			"text": "Wallet"
+		}]
+	}
+
+}
