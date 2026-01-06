@@ -8,7 +8,15 @@ export default {
 	},
 	onHide() {
 		console.log('App Hide');
-	}
+	},
+	methods: {
+		logout() {
+			uni.removeStorageSync('isLogin')
+			uni.reLaunch({
+				url: '/pages/login/login'
+			})
+		}
+	},
 };
 </script>
 

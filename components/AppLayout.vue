@@ -56,7 +56,7 @@
 						<uni-icons type="gear-filled" size="20"></uni-icons> ️ <text>Settings</text>
 					</view>
 					<view class="menu-item" @click="logout">
-						<uni-icons type="gear-filled" size="20"></uni-icons> ️ <text>Logout</text>
+						<image src="/static/logout.png" style="width: 22px; height: 22px;"></image>️ <text>Logout</text>
 					</view>
 				</view>
 			</view>
@@ -162,7 +162,6 @@
 </script>
 
 <style lang="scss" scoped>
-	// ✅ Ensure font works — define here (or better: in App.vue globally)
 	@font-face {
 		font-family: 'CustomFont';
 		src: url('/static/font/fontello.ttf') format('truetype');
@@ -275,7 +274,7 @@
 	.content {
 		flex: 1;
 		padding: 20rpx;
-		margin-bottom: 30px; // Leave space for Footer
+		margin-bottom: 30px;
 	}
 
 	/* ===== DRAWER ===== */
@@ -327,6 +326,10 @@
 		padding: 16rpx 0;
 
 		.menu-item {
+			display: flex;
+			align-items: center;
+			gap: 5rpx; 
+
 			padding: 28rpx 32rpx;
 			font-size: 32rpx;
 			border-bottom: 1rpx solid #f0f0f0;
@@ -339,6 +342,7 @@
 				background: #f9fafb;
 			}
 		}
+
 	}
 
 	/* Animation */
