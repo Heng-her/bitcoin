@@ -15,38 +15,31 @@
 		<!-- Profile Header -->
 		<view class="profile-header">
 			<view class="avatar-box">
-				<image class="avatar"
-					src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6UThBTuKffh0DBlj25FtXwJVCv91ZUhhrsIj4tRuJf_gmN0DGm82G9C8114BQvmq9wCGY7FiiGXU4-7nAkh_NJFuJ9qfQOZB4bkt5OQ_BKxQh7Thi5eWzHx2ZRRJvLQKHLI0SkBIBl6_RrWnP4AOYsdqB2dIpaxHoWPOqh5z6sNlYC3nOBNwT7Y2AFGjfYYPa68wZiKcqcw5bKDPys56T5RS6sex6gHpaUrI_CD_t3o0fgLc5MUdBvu9EIC-ilroi56WBjRVKYL9O"
-					mode="aspectFill" />
-				<view class="edit-avatar">
-					<uni-icons type="compose" size="14" />
-				</view>
+				<image class="avatar" src="/static/profile/user.png" mode="aspectFill" />
 			</view>
 
 			<view class="name-row">
-				<text class="name">Alex Trader</text>
-				<uni-icons type="checkmarkempty" size="18" color="#2bee79" />
+				<text class="name">Bunheng</text>
+				<image src="/static/profile/verified.png" style="width: 25px; height: 25px;" />
 			</view>
 
-			<view class="account-id">
+			<view class="account-id" @click="copyToClipboard">
 				<text>ACCT-849302</text>
-				<uni-icons type="copy" size="14" />
+				<image :src="iscopy ? '/static/profile/copy.png' : '/static/profile/check.png'" class="copy-icon" />
 			</view>
-
-			<text class="level">Level 2 Verified</text>
 		</view>
 
 		<!-- Equity Card -->
 		<view class="card">
 			<view class="equity-row">
-				<view>
+				<view style="display: grid;">
 					<text class="muted">Total Equity</text>
 					<text class="equity">$14,250.00</text>
 				</view>
 				<view class="pnl">
 					<text class="muted">Today</text>
 					<view class="pnl-badge">
-						<uni-icons type="arrowup" size="14" />
+						<image src="/static/profile/up.png" style="width: 15px; height: 15px;" />
 						<text>+$120.50</text>
 					</view>
 					<text class="pnl-percent">+0.8%</text>
@@ -110,26 +103,31 @@
 </template>
 
 <script>
-	const MenuItem = {
-		props: ['icon', 'title', 'desc'],
-		template: `
-		<view class="menu-item">
-			<view class="menu-icon">
-				<uni-icons :type="icon" size="20" />
-			</view>
-			<view class="menu-text">
-				<text class="menu-title">{{ title }}</text>
-				<text v-if="desc" class="menu-desc">{{ desc }}</text>
-			</view>
-			<uni-icons type="arrowright" size="16" color="#bbb" />
-		</view>
-	`
-	}
-
+	import MenuItem from '../../components/MenuItem.vue';
 	export default {
+		data() {
+			return {
+				iscopy: true
+			}
+		},
 		methods: {
 			backhome() {
 				uni.navigateBack()
+			},
+			copyToClipboard() {
+				this.iscopy = false;
+				uni.setClipboardData({
+					data: 'ACCT-849302',
+					success: () => {
+						uni.showToast({
+							title: 'coped'
+						})
+					}
+				});
+				// Reset icon after 2 seconds
+				setTimeout(() => {
+					this.iscopy = true;
+				}, 2000);
 			}
 		},
 		components: {
@@ -181,21 +179,14 @@
 		width: 200rpx;
 		height: 200rpx;
 		border-radius: 50%;
-	}
-
-	.edit-avatar {
-		position: absolute;
-		bottom: 8rpx;
-		right: 8rpx;
-		background: #2bee79;
-		border-radius: 50%;
-		padding: 8rpx;
+		border: 5rpx solid #2bee79;
+		overflow: hidden;
 	}
 
 	.name-row {
 		display: flex;
 		align-items: center;
-		gap: 8rpx;
+		gap: 4rpx;
 		font-size: 36rpx;
 		font-weight: bold;
 	}
@@ -208,6 +199,12 @@
 		padding: 6rpx 16rpx;
 		border-radius: 999rpx;
 		font-size: 22rpx;
+	}
+
+	.copy-icon {
+		width: 24rpx;
+		height: 24rpx;
+		margin-left: 10rpx;
 	}
 
 	.level {
@@ -245,7 +242,7 @@
 	.pnl-badge {
 		display: flex;
 		align-items: center;
-		gap: 4rpx;
+		gap: 8rpx;
 		background: rgba(43, 238, 121, 0.15);
 		padding: 6rpx 12rpx;
 		border-radius: 12rpx;
@@ -273,7 +270,7 @@
 	}
 
 	.bar {
-		height: 12rpx;
+		height: 14rpx;
 		background: #eee;
 		border-radius: 999rpx;
 		overflow: hidden;
