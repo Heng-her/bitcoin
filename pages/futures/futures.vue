@@ -17,8 +17,8 @@
 				</view>
 			</view>
 
-			<view class="icon-btn">
-				<uni-icons type="star" size="22" />
+			<view class="icon-btn" @click="handlefavorite()">
+				<uni-icons :type="!favorite?'favoritestar':'star-filled'" size="22" />
 			</view>
 		</view>
 
@@ -44,21 +44,30 @@
 
 		<!-- Chart Placeholder -->
 		<view class="chart-box">
-			<image src="/static/future/candle.jpg" />
+			<image src="/static/future/candle.jpg" style="width: full; height: 90%;" />
 		</view>
 
 		<!-- Market Stats -->
 		<view class="stats">
 			<view class="stat-card">
-				<text class="stat-label">24h High</text>
+				<view class="">
+					<uni-icons type="arrow-up"></uni-icons>
+					<text class="stat-label">24h High</text>
+				</view>
 				<text class="stat-value">$43,100.00</text>
 			</view>
 			<view class="stat-card">
-				<text class="stat-label">24h Low</text>
+				<view class="">
+					<uni-icons type="arrow-down"></uni-icons>
+					<text class="stat-label">24h Low</text>
+				</view>
 				<text class="stat-value">$41,200.00</text>
 			</view>
-			<view class="stat-card">
-				<text class="stat-label">Volume (24h)</text>
+			<view style="">
+				<view class="">
+					<image src="/static/graphbar.png" style="width: 30rpx; height: 30rpx;"></image>
+					<text class="stat-label">Volume (24h)</text>
+				</view>
 				<text class="stat-value">2.1B USD</text>
 			</view>
 			<view class="stat-card">
@@ -78,11 +87,11 @@
 
 		<!-- Bottom Actions -->
 		<view class="bottom-bar">
-			<view class="sell-btn">
+			<view class="sell-btn" @click="handlesel()">
 				<uni-icons type="minus" size="16" />
 				Sell
 			</view>
-			<view class="buy-btn">
+			<view class="buy-btn" @click="handlebuy">
 				<uni-icons type="plus" size="16" />
 				Buy
 			</view>
@@ -111,7 +120,24 @@
 				uni.switchTab({
 					url: "/pages/index/index"
 				})
+			},
+			handlesel() {
+				uni.showToast({
+					title: 'Sell',
+					icon:'none'
+				})
+			},
+			handlebuy(){
+				uni.showToast({
+					title: 'Buy',
+					icon: 'none'
+				})
 			}
+		},
+		handlesel() {
+			uni.showToast({
+				title: 'Sell',
+			})
 		},
 		onShow() {
 			uni.hideTabBar()
@@ -246,11 +272,13 @@
 		background: #fff;
 		border-radius: 20rpx;
 		padding: 24rpx;
+		display: grid;
+		justify-items: start;
+		background-color: #2bee7952;
 	}
 
 	.stat-label {
 		font-size: 22rpx;
-		color: #888;
 	}
 
 	.stat-value {
