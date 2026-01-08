@@ -112,7 +112,9 @@
 		},
 		methods: {
 			backhome() {
-				uni.navigateBack()
+				uni.switchTab({
+					url: '/pages/index/index'
+				})
 			},
 			copyToClipboard() {
 				this.iscopy = false;

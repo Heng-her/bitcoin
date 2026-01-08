@@ -33,29 +33,13 @@
 	},
 
 	"tabBar": {
-		"color": "#9ca3af",
-		"selectedColor": "#22c55e",
-		"list": [{
-			"pagePath": "pages/index/index",
-			"iconPath": "/static/tab/home.png",
-			"selectedIconPath": "/static/tab/home_active.png",
-			"text": "Home"
-		}, {
-			"pagePath": "pages/market/market",
-			"iconPath": "/static/tab/market.png",
-			"selectedIconPath": "/static/tab/market_active.png",
-			"text": "Market"
-		}, {
-			"pagePath": "pages/futures/futures",
-			"iconPath": "/static/tab/futures.png",
-			"selectedIconPath": "/static/tab/futures_active.png",
-			"text": "Futures"
-		}, {
-			"pagePath": "pages/wallet/wallet",
-			"iconPath": "/static/tab/wallet.png",
-			"selectedIconPath": "/static/tab/wallet_active.png",
-			"text": "Wallet"
-		}]
+	  "list": [
+	    { "pagePath": "pages/index/index" },
+	    { "pagePath": "pages/market/market" },
+	    { "pagePath": "pages/futures/futures" },
+	    { "pagePath": "pages/wallet/wallet" }
+	  ]
 	}
+
 
 }

@@ -1,95 +1,93 @@
 <template>
-	<AppLayout>
-		<view class="container">
-		
-			<!-- Header -->
-			<view class="header">
-				<view class="icon-btn">
-					<uni-icons type="arrowleft" size="22" />
+	<view class="container">
+
+		<!-- Header -->
+		<view class="header">
+			<view class="icon-btn" @click="backTohome()">
+				<uni-icons type="left" size="22" />
+			</view>
+
+			<view class="coin-info">
+				<view class="coin-icon">
+					<uni-icons type="staff" size="18" color="#fff" />
 				</view>
-		
-				<view class="coin-info">
-					<view class="coin-icon">
-						<uni-icons type="staff" size="18" color="#fff" />
-					</view>
-					<view>
-						<text class="coin-pair">BTC/USD</text>
-						<text class="coin-name">Bitcoin</text>
-					</view>
-				</view>
-		
-				<view class="icon-btn">
-					<uni-icons type="star" size="22" />
+				<view>
+					<text class="coin-pair">BTC/USD</text>
+					<text class="coin-name">Bitcoin</text>
 				</view>
 			</view>
-		
-			<!-- Price -->
-			<view class="price-box">
-				<text class="label">Current Price</text>
-				<text class="price">$42,394.50</text>
-		
-				<view class="change">
-					<uni-icons type="arrowup" size="14" color="#2bee79" />
-					<text class="change-text">+1.25%</text>
-					<text class="change-time">24h</text>
-				</view>
-			</view>
-		
-			<!-- Timeframes -->
-			<view class="timeframes">
-				<view v-for="t in timeframes" :key="t" :class="['time-btn', activeTime === t && 'active']"
-					@click="activeTime = t">
-					{{ t }}
-				</view>
-			</view>
-		
-			<!-- Chart Placeholder -->
-			<view class="chart-box">
-				<text class="chart-text">Chart Placeholder</text>
-			</view>
-		
-			<!-- Market Stats -->
-			<view class="stats">
-				<view class="stat-card">
-					<text class="stat-label">24h High</text>
-					<text class="stat-value">$43,100.00</text>
-				</view>
-				<view class="stat-card">
-					<text class="stat-label">24h Low</text>
-					<text class="stat-value">$41,200.00</text>
-				</view>
-				<view class="stat-card">
-					<text class="stat-label">Volume (24h)</text>
-					<text class="stat-value">2.1B USD</text>
-				</view>
-				<view class="stat-card">
-					<text class="stat-label">Market Cap</text>
-					<text class="stat-value">829.4B USD</text>
-				</view>
-			</view>
-		
-			<!-- About -->
-			<view class="about">
-				<text class="about-title">About Bitcoin</text>
-				<text class="about-text">
-					Bitcoin is a decentralized digital currency that allows peer-to-peer
-					transactions without intermediaries.
-				</text>
-			</view>
-		
-			<!-- Bottom Actions -->
-			<view class="bottom-bar">
-				<view class="sell-btn">
-					<uni-icons type="minus" size="16" />
-					Sell
-				</view>
-				<view class="buy-btn">
-					<uni-icons type="plus" size="16" />
-					Buy
-				</view>
+
+			<view class="icon-btn">
+				<uni-icons type="star" size="22" />
 			</view>
 		</view>
-	</AppLayout>
+
+		<!-- Price -->
+		<view class="price-box">
+			<text class="label">Current Price</text>
+			<text class="price">$42,394.50</text>
+
+			<view class="change">
+				<uni-icons type="arrowup" size="14" color="#2bee79" />
+				<text class="change-text">+1.25%</text>
+				<text class="change-time">24h</text>
+			</view>
+		</view>
+
+		<!-- Timeframes -->
+		<view class="timeframes">
+			<view v-for="t in timeframes" :key="t" :class="['time-btn', activeTime === t && 'active']"
+				@click="activeTime = t">
+				{{ t }}
+			</view>
+		</view>
+
+		<!-- Chart Placeholder -->
+		<view class="chart-box">
+			<image src="/static/future/candle.jpg" />
+		</view>
+
+		<!-- Market Stats -->
+		<view class="stats">
+			<view class="stat-card">
+				<text class="stat-label">24h High</text>
+				<text class="stat-value">$43,100.00</text>
+			</view>
+			<view class="stat-card">
+				<text class="stat-label">24h Low</text>
+				<text class="stat-value">$41,200.00</text>
+			</view>
+			<view class="stat-card">
+				<text class="stat-label">Volume (24h)</text>
+				<text class="stat-value">2.1B USD</text>
+			</view>
+			<view class="stat-card">
+				<text class="stat-label">Market Cap</text>
+				<text class="stat-value">829.4B USD</text>
+			</view>
+		</view>
+
+		<!-- About -->
+		<view class="about">
+			<text class="about-title">About Bitcoin</text>
+			<text class="about-text">
+				Bitcoin is a decentralized digital currency that allows peer-to-peer
+				transactions without intermediaries.
+			</text>
+		</view>
+
+		<!-- Bottom Actions -->
+		<view class="bottom-bar">
+			<view class="sell-btn">
+				<uni-icons type="minus" size="16" />
+				Sell
+			</view>
+			<view class="buy-btn">
+				<uni-icons type="plus" size="16" />
+				Buy
+			</view>
+		</view>
+	</view>
 </template>
 
 <script>
@@ -98,11 +96,28 @@
 		data() {
 			return {
 				timeframes: ['1H', '1D', '1W', '1M', '1Y'],
-				activeTime: '1H'
+				activeTime: '1H',
+				favorite: true
 			}
 		},
-		components:{
+		components: {
 			AppLayout
+		},
+		methods: {
+			handlefavorite() {
+				this.favorite = true
+			},
+			backTohome() {
+				uni.switchTab({
+					url: "/pages/index/index"
+				})
+			}
+		},
+		onShow() {
+			uni.hideTabBar()
+		},
+		onHide() {
+			uni.showTabBar()
 		}
 	}
 </script>
@@ -159,6 +174,7 @@
 	.price-box {
 		text-align: center;
 		padding: 32rpx 0;
+		display: grid;
 	}
 
 	.label {
@@ -211,9 +227,7 @@
 	/* Chart */
 	.chart-box {
 		height: 360rpx;
-		margin: 24rpx;
-		border-radius: 20rpx;
-		background: #f6f8f7;
+		background: #ffffff;
 		display: flex;
 		align-items: center;
 		justify-content: center;
