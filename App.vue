@@ -19,18 +19,3 @@ export default {
 	},
 };
 </script>
-
-<style>
-/* ✅ GLOBAL FONT — LOAD ONCE */
-@font-face {
-	font-family: 'CustomFont';
-	src: url('/static/font/fontello.ttf') format('truetype');
-	font-weight: normal;
-	font-style: normal;
-}
-
-/* Optional: make it default for icons */
-.icon {
-	font-family: 'CustomFont';
-}
-</style>

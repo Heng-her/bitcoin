@@ -28,8 +28,10 @@
 			<text class="price">$42,394.50</text>
 
 			<view class="change">
-				<uni-icons type="arrowup" size="14" color="#2bee79" />
-				<text class="change-text">+1.25%</text>
+				<view class="change-text">
+					<image src="/static/profile/up.png" style="width: 30rpx; height: 30rpx;"></image>
+					<text>+1.25%</text>
+				</view>
 				<text class="change-time">24h</text>
 			</view>
 		</view>
@@ -63,7 +65,7 @@
 				</view>
 				<text class="stat-value">$41,200.00</text>
 			</view>
-			<view style="">
+			<view class="stat-card">
 				<view class="">
 					<image src="/static/graphbar.png" style="width: 30rpx; height: 30rpx;"></image>
 					<text class="stat-label">Volume (24h)</text>
@@ -80,8 +82,8 @@
 		<view class="about">
 			<text class="about-title">About Bitcoin</text>
 			<text class="about-text">
-				Bitcoin is a decentralized digital currency that allows peer-to-peer
-				transactions without intermediaries.
+				Bitcoin is a decentralized digital currency, without a central bank or single administrator, that can be
+				sent from user to user on the peer-to-peer bitcoin network without the need for intermediaries.
 			</text>
 		</view>
 
@@ -124,10 +126,10 @@
 			handlesel() {
 				uni.showToast({
 					title: 'Sell',
-					icon:'none'
+					icon: 'none'
 				})
 			},
-			handlebuy(){
+			handlebuy() {
 				uni.showToast({
 					title: 'Buy',
 					icon: 'none'
@@ -199,7 +201,6 @@
 	/* Price */
 	.price-box {
 		text-align: center;
-		padding: 32rpx 0;
 		display: grid;
 	}
 
@@ -219,12 +220,18 @@
 		align-items: center;
 		justify-content: center;
 		gap: 8rpx;
-		color: #2bee79;
+	}
+
+	.change-text {
+		background-color: #2bee7940;
+		padding: 5rpx 15rpx 5rpx 15rpx;
+		border-radius: 10rpx;
 	}
 
 	.change-time {
 		color: #888;
 		font-size: 22rpx;
+		font-weight: 600;
 	}
 
 	/* Timeframes */
@@ -289,6 +296,7 @@
 	/* About */
 	.about {
 		padding: 24rpx;
+		display: grid;
 	}
 
 	.about-title {
