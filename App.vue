@@ -1,4 +1,5 @@
 <script>
+	import { confirmLogout } from './common/auth';
 export default {
 	onLaunch() {
 		console.log('App Launch');
@@ -10,12 +11,7 @@ export default {
 		console.log('App Hide');
 	},
 	methods: {
-		logout() {
-			uni.removeStorageSync('isLogin')
-			uni.reLaunch({
-				url: '/pages/login/login'
-			})
-		}
+		confirmLogout
 	},
 };
 </script>

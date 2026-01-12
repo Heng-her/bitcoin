@@ -91,7 +91,7 @@
 		</view>
 
 		<!-- Logout -->
-		<view class="logout">
+		<view class="logout" @click="$confirmLogout">
 			<view class="logout-btn">
 				<uni-icons type="logout" size="18" />
 				Log Out
@@ -103,6 +103,7 @@
 </template>
 
 <script>
+	import { logout } from '../../common/auth';
 	import MenuItem from '../../components/MenuItem.vue';
 	export default {
 		data() {
