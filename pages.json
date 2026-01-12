@@ -22,6 +22,12 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/setting/setting",
+			"style": {
+				"navigationBarTitleText": ""
+			}
 		}
 	],
 
@@ -33,13 +39,22 @@
 	},
 
 	"tabBar": {
-	  "list": [
-	    { "pagePath": "pages/index/index" },
-	    { "pagePath": "pages/market/market" },
-	    { "pagePath": "pages/futures/futures" },
-	    { "pagePath": "pages/wallet/wallet" }
-	  ]
+		"list": [{
+				"pagePath": "pages/index/index"
+			},
+			{
+				"pagePath": "pages/market/market"
+			},
+			{
+				"pagePath": "pages/futures/futures"
+			},
+			{
+				"pagePath": "pages/wallet/wallet"
+			}
+		]
+	},
+	"easycom": {
+		"autoscan": true
 	}
-
 
 }

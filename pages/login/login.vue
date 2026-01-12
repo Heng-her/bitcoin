@@ -101,8 +101,9 @@
 				}
 				if (this.email === 'admin@gmail.com' && this.password === 'admin123') {
 					uni.showToast({
-						title: 'Login successful',
+						title: 'Login successfully',
 						icon: 'success',
+						duration: 1500
 					})
 					uni.setStorageSync('isLogin', true)
 					this.loading = true;

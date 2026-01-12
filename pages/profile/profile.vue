@@ -1,13 +1,12 @@
 <template>
 	<view class="page">
-
 		<!-- Top Bar -->
 		<view class="top-bar">
 			<view class="icon-btn" @click="backhome">
 				<uni-icons type="left" size="22" />
 			</view>
 			<text class="title">Profile</text>
-			<view class="icon-btn">
+			<view class="icon-btn" @click="setting">
 				<uni-icons type="gear" size="22" />
 			</view>
 		</view>
@@ -72,7 +71,6 @@
 		<!-- Account Menu -->
 		<view class="section">
 			<text class="section-title">Account</text>
-
 			<view class="menu">
 				<MenuItem icon="locked" title="Security" desc="2FA, Password" />
 				<MenuItem icon="creditcard" title="Payment Methods" desc="Visa •••• 4242" />
@@ -103,7 +101,6 @@
 </template>
 
 <script>
-	import { logout } from '../../common/auth';
 	import MenuItem from '../../components/MenuItem.vue';
 	export default {
 		data() {
@@ -116,6 +113,11 @@
 				uni.switchTab({
 					url: '/pages/index/index'
 				})
+			},
+			setting() {
+				uni.navigateTo({
+					url: '/pages/setting/setting'
+				});
 			},
 			copyToClipboard() {
 				this.iscopy = false;

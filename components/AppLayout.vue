@@ -52,7 +52,7 @@
 					<view class="menu-item" @click="navTo('/pages/profile/profile')">
 						<uni-icons type="contact-filled" size="20"></uni-icons> <text>Profile</text>
 					</view>
-					<view class="menu-item" @click="navTo('/pages/settings/settings')">
+					<view class="menu-item" @click="navTo('/pages/setting/setting')">
 						<uni-icons type="gear-filled" size="20"></uni-icons> ️ <text>Settings</text>
 					</view>
 					<view class="menu-item" @click="logout">
@@ -109,17 +109,7 @@
 			},
 			logout() {
 				this.closeDrawer();
-				uni.showModal({
-					title: 'Logout',
-					content: 'Are you sure?',
-					success: (res) => {
-						if (res.confirm) {
-							uni.reLaunch({
-								url: '/pages/login/login'
-							});
-						}
-					}
-				});
+				this.$confirmLogout()
 			},
 
 			// 🔐 Action Sheet Guard
