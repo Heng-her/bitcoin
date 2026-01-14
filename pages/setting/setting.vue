@@ -134,24 +134,32 @@
 				<text class="copyright">© 2024 TradePro Inc.</text>
 			</view>
 		</view>
-		<uni-popup ref="popup" type="center" animation :mask-click="false">
-			<view class="qr-overlay">
-				<view class="qr-dialog">
-					<text class="qr-title">My QR Code</text>
-
-					<image src="/static/profile/qrcode.png" class="qr-image" mode="aspectFit" />
-
-					<view class="close-btn" @click="close">
-						<text>Close</text>
-					</view>
+		<uni-popup ref="popup" type="center" :mask-click="false" class="qr-overlay" @click="close()">
+			<view class="qr-dialog">
+				<view class="close-icon" @click="close">
+					<uni-icons type="closeempty" size="50rpx"></uni-icons>
 				</view>
+
+				<text class="qr-title">My QR Code</text>
+				<canvas id="qrcode"></canvas>
+
 			</view>
 		</uni-popup>
-
 	</view>
 </template>
 <script>
+	import uniTransition from '@/uni_modules/uni-transition/components/uni-transition/uni-transition.vue'
+
+	import QRCode from 'qrcodejs2'
 	export default {
+		components: {
+			uniTransition // ← register it
+		},
+		data() {
+			return {
+				randomId: null
+			}
+		},
 		methods: {
 			backhome() {
 				uni.switchTab({
@@ -159,12 +167,32 @@
 				})
 			},
 			open() {
-				this.$refs.popup.open('top')
+				this.$refs.popup.open('top');
+				this.$nextTick(() => {
+					new QRCode('qrcode', {
+						text: this.randomId
+
+					})
+				})
 			},
 			close() {
 				this.$refs.popup.close()
+			},
+			generateRandomId() {
+				if (window.crypto && window.crypto.getRandomValues) {
+					const array = new Uint32Array(1)
+					window.crypto.getRandomValues(array)
+					this.randomId = array[0]
+				} else {
+					this.randomId = Math.floor(Math.random() * 1e9)
+				}
 			}
+		},
+		mounted() {
+			this.generateRandomId()
+			console.log('random id:', this.randomId)
 		}
+
 	}
 </script>
 <style lang="scss" scoped>
@@ -387,47 +415,41 @@
 
 	/* Full screen overlay */
 	.qr-overlay {
-		width: 100vw;
-		height: 100vh;
-		background-color: rgba(0, 0, 0, 0.5);
-		/* 50% black */
+		position: absolute;
 		display: flex;
+		width: 100%;
+		height: 50%;
+		background-color: #00000090;
 		align-items: center;
 		justify-content: center;
 	}
 
-	/* Center card */
 	.qr-dialog {
-		width: 520rpx;
-		padding: 32rpx;
-		background: #ffffff;
-		border-radius: 24rpx;
+		background-color: white;
+		height: 630rpx;
 		display: flex;
-		flex-direction: column;
 		align-items: center;
+		flex-direction: column;
+		padding-left: 80rpx;
+		margin-inline: 80rpx;
 	}
 
 	.qr-title {
 		font-size: 28rpx;
 		font-weight: 700;
-		margin-bottom: 24rpx;
+		padding: 24rpx;
 	}
 
-	.qr-image {
-		width: 400rpx;
-		height: 400rpx;
-		margin-bottom: 32rpx;
-	}
-
-	.close-btn {
-		padding: 16rpx 48rpx;
-		background: #2563eb;
-		color: #fff;
-		border-radius: 999rpx;
-		font-size: 24rpx;
-	}
-
-	.close-btn:active {
-		opacity: 0.8;
+	/* X close icon */
+	.close-icon {
+		position: absolute;
+		top: 20rpx;
+		right: 100rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		font-size: 28rpx;
+		color: #666;
 	}
 </style>
