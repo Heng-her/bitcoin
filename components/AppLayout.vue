@@ -9,7 +9,7 @@
 				</view>
 
 				<view class="user">
-					<text class="app-name">TradeApp</text>
+					<text class="app-name">{{translatedAppName}}</text>
 					<text class="welcome">{{ welcome }}, {{ username }}</text>
 				</view>
 			</view>
@@ -17,8 +17,7 @@
 			<!-- Right -->
 			<view class="header-right">
 				<view class="lang-btn" @click.stop="changelang">
-					<text class="lang-text">EN</text>
-					<!-- Use inline SVG or image (already works) -->
+					<text class="lang-text">{{ currentLangLabel }}</text>
 					<image src="/static/languages.png" class="lang-icon" />
 				</view>
 				<view class="menu-btn" @click.stop="toggleDrawer">
@@ -47,7 +46,7 @@
 				</view>
 				<view class="drawer-body">
 					<view class="menu-item" @click="navTo('/pages/index/index')">
-						<uni-icons type="home" size="20"></uni-icons> <text>Home</text>
+						<uni-icons type="home" size="20"></uni-icons> <text>{{$t('home')}}</text>
 					</view>
 					<view class="menu-item" @click="navTo('/pages/profile/profile')">
 						<uni-icons type="contact-filled" size="20"></uni-icons> <text>Profile</text>
@@ -66,7 +65,9 @@
 
 <script>
 	import FooterVue from './Footer.vue';
-
+	import {
+		$t
+	} from '../utils/i18n';
 	export default {
 		name: 'AppLayout',
 		components: {
@@ -90,7 +91,8 @@
 		data() {
 			return {
 				drawerVisible: false,
-				actionSheetOpen: false
+				actionSheetOpen: false,
+				currentLang: uni.getStorageSync('APP_LANG') || 'en'
 			};
 		},
 
@@ -125,10 +127,20 @@
 			},
 
 			changelang() {
+				const langLabels = ['English', 'ភាសាខ្មែរ'];
+				const langCodes = ['en', 'km'];
+
 				this.openActionSheet({
-					itemList: ['EN', 'CN', 'PH'],
+					itemList: langLabels,
 					success: (res) => {
-						console.log('Language:', ['EN', 'CN', 'PH'][res.tapIndex]);
+						const selectedLang = langCodes[res.tapIndex];
+						uni.setStorageSync('APP_LANG', selectedLang);
+						this.currentLang = selectedLang; // 👈 update reactive state
+
+						uni.showToast({
+							title: selectedLang === 'km' ? 'បាន​ផ្លាស់ប្ដូរ​ភាសា' : 'Language changed',
+							icon: 'none'
+						});
 					}
 				});
 			},
@@ -141,12 +153,37 @@
 					}
 				});
 			},
-
 			goProfile() {
 				uni.navigateTo({
 					url: '/pages/profile/profile'
 				});
+			},
+			$t
+		},
+		computed: {
+			currentLangLabel() {
+				return this.currentLang === 'km' ? 'KM' : 'EN';
+			},
+			translatedAppName() {
+				return $t('app_name', this.currentLang); // pass lang explicitly
+			},
+			translatedWelcome() {
+				return $t('welcome', this.currentLang);
 			}
+		},
+		created() {
+			// Initialize language
+			let lang = uni.getStorageSync('APP_LANG');
+			if (!lang) {
+				const sysInfo = uni.getSystemInfoSync();
+				const sysLang = sysInfo.language || 'en';
+				lang = sysLang.startsWith('km') ? 'km' : 'en';
+				uni.setStorageSync('APP_LANG', lang);
+			}
+			this.currentLang = lang; // 👈 make it reactive
+		},
+		$t(key) {
+			return $t(key, this.currentLang);
 		}
 	};
 </script>
@@ -318,7 +355,7 @@
 		.menu-item {
 			display: flex;
 			align-items: center;
-			gap: 5rpx; 
+			gap: 5rpx;
 
 			padding: 28rpx 32rpx;
 			font-size: 32rpx;

@@ -149,7 +149,7 @@
 </template>
 <script>
 	import uniTransition from '@/uni_modules/uni-transition/components/uni-transition/uni-transition.vue'
-
+	import { $t } from '../../utils/i18n'
 	import QRCode from 'qrcodejs2'
 	export default {
 		components: {
