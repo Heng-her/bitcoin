@@ -8,7 +8,7 @@
 					<uni-icons type="left" size="22" />
 				</view>
 
-				<text class="title">Settings</text>
+				<text class="title">{{ $t('settings') }}</text>
 
 				<view class="icon-btn placeholder"></view>
 			</view>
@@ -37,14 +37,14 @@
 
 			<!-- Preferences -->
 			<view class="section">
-				<text class="section-title">Preferences</text>
+				<text class="section-title">{{ $t('preferences') }}</text>
 
 				<view class="card">
 					<view class="row">
 						<view class="row-icon">
 							<image src="/static/languages.png" style="width: 40rpx; height: 40rpx;" />
 						</view>
-						<text class="row-text">Language</text>
+						<text class="row-text">{{ $t('language') }}</text>
 						<view class="row-right">
 							<text class="row-sub">English (US)</text>
 							<uni-icons type="right" size="16" />
@@ -70,7 +70,7 @@
 						<view class="row-icon">
 							<image src="/static/profile/light_dark.png" style="width: 40rpx; height: 40rpx;" />
 						</view>
-						<text class="row-text">Dark Mode</text>
+						<text class="row-text">{{ $t('dark_mode') }}</text>
 						<switch />
 					</view>
 				</view>
@@ -78,7 +78,7 @@
 
 			<!-- Security -->
 			<view class="section">
-				<text class="section-title">Security</text>
+				<text class="section-title">{{ $t('security') }}</text>
 
 				<view class="card">
 					<view class="row">
@@ -95,7 +95,7 @@
 						<view class="row-icon">
 							<uni-icons type="locked" size="20" />
 						</view>
-						<text class="row-text">2-Factor Auth</text>
+						<text class="row-text">{{ $t('two_factor_auth') }}</text>
 						<view class="row-right">
 							<text class="enabled">Enabled</text>
 							<uni-icons type="right" size="16" />
@@ -123,7 +123,7 @@
 						<view class="row-icon danger">
 							<image src="/static/logout.png" style="width: 40rpx; height: 40rpx;" />
 						</view>
-						<text class="row-text danger-text">Log Out</text>
+						<text class="row-text danger-text">{{ $t('logout') }}</text>
 					</view>
 				</view>
 			</view>
@@ -140,7 +140,7 @@
 					<uni-icons type="closeempty" size="50rpx"></uni-icons>
 				</view>
 
-				<text class="qr-title">My QR Code</text>
+				<text class="qr-title">{{ $t('my_qr_code') }}</text>
 				<canvas id="qrcode"></canvas>
 
 			</view>
@@ -149,18 +149,41 @@
 </template>
 <script>
 	import uniTransition from '@/uni_modules/uni-transition/components/uni-transition/uni-transition.vue'
-	import { $t } from '../../utils/i18n'
+	import {
+		$t,
+		getCurrentLanguage
+	} from '../../utils/i18n'
 	import QRCode from 'qrcodejs2'
+
 	export default {
 		components: {
-			uniTransition // ← register it
+			uniTransition
 		},
 		data() {
 			return {
-				randomId: null
+				randomId: null,
+				currentLang: getCurrentLanguage() // Get current language
 			}
 		},
+		created() {
+			// Listen for language changes from AppLayout
+			this.$on && this.$on('language-changed', (lang) => {
+				this.currentLang = lang;
+				this.$forceUpdate && this.$forceUpdate();
+			});
+
+			// Alternative: use global event bus
+			uni.$on && uni.$on('language-changed', (lang) => {
+				this.currentLang = lang;
+				this.$forceUpdate && this.$forceUpdate();
+			});
+		},
 		methods: {
+			// Add $t method to use in template
+			$t(key) {
+				return $t(key, this.currentLang);
+			},
+
 			backhome() {
 				uni.switchTab({
 					url: '/pages/index/index'
@@ -171,7 +194,6 @@
 				this.$nextTick(() => {
 					new QRCode('qrcode', {
 						text: this.randomId
-
 					})
 				})
 			},
@@ -188,11 +210,15 @@
 				}
 			}
 		},
+		computed: {
+			currentLanguage() {
+				return this.currentLang === 'km' ? 'ខ្មែរ' : 'English';
+			}
+		},
 		mounted() {
 			this.generateRandomId()
 			console.log('random id:', this.randomId)
 		}
-
 	}
 </script>
 <style lang="scss" scoped>

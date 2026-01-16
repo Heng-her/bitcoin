@@ -9,14 +9,14 @@
 				</view>
 
 				<view class="user">
-					<text class="app-name">{{translatedAppName}}</text>
-					<text class="welcome">{{ welcome }}, {{ username }}</text>
+					<text class="app-name">{{ translatedAppName }}</text>
+					<text class="welcome">{{ translatedWelcome }}, {{ username }}</text>
 				</view>
 			</view>
 
 			<!-- Right -->
 			<view class="header-right">
-				<view class="lang-btn" @click.stop="changelang">
+				<view class="lang-btn" @click.stop="changeLang">
 					<text class="lang-text">{{ currentLangLabel }}</text>
 					<image src="/static/languages.png" class="lang-icon" />
 				</view>
@@ -41,21 +41,25 @@
 		<transition name="slide">
 			<view v-show="drawerVisible" class="drawer">
 				<view class="drawer-header">
-					<text class="drawer-title">Menu</text>
+					<text class="drawer-title">{{ $t('menu') }}</text>
 					<view class="close-btn" @click="closeDrawer">×</view>
 				</view>
 				<view class="drawer-body">
 					<view class="menu-item" @click="navTo('/pages/index/index')">
-						<uni-icons type="home" size="20"></uni-icons> <text>{{$t('home')}}</text>
+						<uni-icons type="home" size="20"></uni-icons>
+						<text>{{ $t('home') }}</text>
 					</view>
 					<view class="menu-item" @click="navTo('/pages/profile/profile')">
-						<uni-icons type="contact-filled" size="20"></uni-icons> <text>Profile</text>
+						<uni-icons type="contact-filled" size="20"></uni-icons>
+						<text>{{ $t('profile') }}</text>
 					</view>
 					<view class="menu-item" @click="navTo('/pages/setting/setting')">
-						<uni-icons type="gear-filled" size="20"></uni-icons> ️ <text>Settings</text>
+						<uni-icons type="gear-filled" size="20"></uni-icons>
+						<text>{{ $t('settings') }}</text>
 					</view>
 					<view class="menu-item" @click="logout">
-						<image src="/static/logout.png" style="width: 22px; height: 22px;"></image>️ <text>Logout</text>
+						<image src="/static/logout.png" style="width: 22px; height: 22px;"></image>
+						<text>{{ $t('logout') }}</text>
 					</view>
 				</view>
 			</view>
@@ -66,18 +70,17 @@
 <script>
 	import FooterVue from './Footer.vue';
 	import {
-		$t
+		$t,
+		getCurrentLanguage,
+		setLanguage
 	} from '../utils/i18n';
+
 	export default {
 		name: 'AppLayout',
 		components: {
 			FooterVue
 		},
 		props: {
-			welcome: {
-				type: String,
-				default: 'Welcome back'
-			},
 			username: {
 				type: String,
 				default: 'bunheng'
@@ -92,55 +95,111 @@
 			return {
 				drawerVisible: false,
 				actionSheetOpen: false,
-				currentLang: uni.getStorageSync('APP_LANG') || 'en'
+				currentLang: 'en'
 			};
 		},
 
+		created() {
+			this.initLanguage();
+		},
+
 		methods: {
+			// Add this method to use $t in template
+			$t(key) {
+				return $t(key, this.currentLang);
+			},
+
+			// Language initialization
+			initLanguage() {
+				let lang = getCurrentLanguage();
+				if (!lang) {
+					try {
+						const sysInfo = uni.getSystemInfoSync();
+						const sysLang = sysInfo.language || sysInfo.locale || 'en';
+						lang = sysLang.startsWith('km') ? 'km' : 'en';
+						setLanguage(lang);
+					} catch (e) {
+						lang = 'en';
+						setLanguage(lang);
+					}
+				}
+				this.currentLang = lang;
+			},
+
+			// Language change method
+			changeLang() {
+				const langLabels = {
+					en: 'English',
+					km: 'ភាសាខ្មែរ'
+				};
+
+				const langOptions = [{
+						text: langLabels.en,
+						value: 'en'
+					},
+					{
+						text: langLabels.km,
+						value: 'km'
+					}
+				];
+
+				this.openActionSheet({
+					itemList: langOptions.map(opt => opt.text),
+					success: (res) => {
+						const selectedLang = langOptions[res.tapIndex].value;
+						if (selectedLang === this.currentLang) return;
+
+						// Update language
+						setLanguage(selectedLang);
+						this.currentLang = selectedLang;
+
+						// Show toast
+						uni.showToast({
+							title: this.$t('language_changed'),
+							icon: 'none',
+							duration: 1500
+						});
+
+						// Emit a global event to notify all components of the language change
+						uni.$emit('language-changed', selectedLang);
+					}
+				});
+			},
+
 			toggleDrawer() {
 				this.drawerVisible = !this.drawerVisible;
 			},
+
 			closeDrawer() {
 				this.drawerVisible = false;
 			},
+
 			navTo(url) {
 				this.closeDrawer();
 				uni.navigateTo({
 					url
 				});
 			},
+
 			logout() {
 				this.closeDrawer();
-				this.$confirmLogout()
+				// Your logout logic here
+				console.log('Logout');
 			},
 
-			// 🔐 Action Sheet Guard
 			openActionSheet(options) {
 				if (this.actionSheetOpen) return;
 				this.actionSheetOpen = true;
+
 				uni.showActionSheet({
 					...options,
+					fail: (err) => {
+						console.log('ActionSheet failed:', err);
+					},
 					complete: () => {
-						this.actionSheetOpen = false;
-					}
-				});
-			},
-
-			changelang() {
-				const langLabels = ['English', 'ភាសាខ្មែរ'];
-				const langCodes = ['en', 'km'];
-
-				this.openActionSheet({
-					itemList: langLabels,
-					success: (res) => {
-						const selectedLang = langCodes[res.tapIndex];
-						uni.setStorageSync('APP_LANG', selectedLang);
-						this.currentLang = selectedLang; // 👈 update reactive state
-
-						uni.showToast({
-							title: selectedLang === 'km' ? 'បាន​ផ្លាស់ប្ដូរ​ភាសា' : 'Language changed',
-							icon: 'none'
-						});
+						setTimeout(() => {
+							this.actionSheetOpen = false;
+						}, 300);
 					}
 				});
 			},
@@ -150,40 +209,33 @@
 					itemList: ['Buy', 'Sell', 'Trade History'],
 					success: (res) => {
 						console.log('Trade:', ['Buy', 'Sell', 'History'][res.tapIndex]);
+						uni.showToast({
+							title: ['Buy', 'Sell', 'History'][res.tapIndex],
+							icon: 'none'
+						})
 					}
 				});
 			},
+
 			goProfile() {
 				uni.navigateTo({
 					url: '/pages/profile/profile'
 				});
-			},
-			$t
+			}
 		},
+
 		computed: {
 			currentLangLabel() {
 				return this.currentLang === 'km' ? 'KM' : 'EN';
 			},
+
 			translatedAppName() {
-				return $t('app_name', this.currentLang); // pass lang explicitly
+				return $t('app_name', this.currentLang);
 			},
+
 			translatedWelcome() {
 				return $t('welcome', this.currentLang);
 			}
-		},
-		created() {
-			// Initialize language
-			let lang = uni.getStorageSync('APP_LANG');
-			if (!lang) {
-				const sysInfo = uni.getSystemInfoSync();
-				const sysLang = sysInfo.language || 'en';
-				lang = sysLang.startsWith('km') ? 'km' : 'en';
-				uni.setStorageSync('APP_LANG', lang);
-			}
-			this.currentLang = lang; // 👈 make it reactive
-		},
-		$t(key) {
-			return $t(key, this.currentLang);
 		}
 	};
 </script>

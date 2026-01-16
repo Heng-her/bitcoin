@@ -43,7 +43,7 @@
 							<view class="coin-icon" :style="{background: coin.color}">
 								{{coin.symbol}}
 							</view>
-							
+
 						</view>
 						<view style="display: grid;">
 							<text class="coin-name">
@@ -67,9 +67,14 @@
 <script>
 	import MyButton from '../../components/MyButton.vue'
 	import AppLayout from '../../components/AppLayout.vue'
+	import {
+		$t,
+		getCurrentLanguage
+	} from '../../utils/i18n'
 	export default {
 		data() {
 			return {
+				currentLang: getCurrentLanguage(),
 				activeTab: 'Hot',
 
 				promo: {
@@ -78,40 +83,6 @@
 					desc: 'Easy and Simple Transaction with 0% fees',
 					bg: './static/signal.png'
 				},
-
-				actions: [{
-						label: 'Deposit',
-						icon: 'wallet'
-					},
-					{
-						label: 'Withdraw',
-						icon: 'paperplane'
-					},
-					{
-						label: 'Mining',
-						icon: 'vip'
-					},
-					{
-						label: 'Identity',
-						icon: 'contact'
-					},
-					{
-						label: 'Messages',
-						icon: 'chat'
-					},
-					{
-						label: 'Live Agent',
-						icon: 'headphones'
-					},
-					{
-						label: 'App',
-						icon: 'phone'
-					},
-					{
-						label: 'More',
-						icon: 'more-filled'
-					}
-				],
 
 				tabs: ['Gainers', 'Vol'],
 
@@ -166,12 +137,63 @@
 				})
 			}
 		},
+		created() {
+			uni.$on('language-changed', (lang) => {
+				this.currentLang = lang;
+			});
+		},
+		beforeDestroy() {
+			uni.$off('language-changed');
+		},
 		methods: {
 			logout() {
 				uni.removeStorageSync('isLogin')
 				uni.reLaunch({
 					url: '/pages/login/login'
 				})
+			},
+			$t(key) {
+				return $t(key, this.currentLang);
+			},
+		},
+		computed: {
+			actions() {
+				return [{
+						label: this.$t('deposit'),
+						icon: 'wallet'
+					},
+					{
+						label: this.$t('withdraw'),
+						icon: 'paperplane'
+					},
+					{
+						label: this.$t('mining'),
+						icon: 'vip'
+					},
+					{
+						label: this.$t('identity'),
+						icon: 'contact'
+					},
+					{
+						label: this.$t('messages'),
+						icon: 'chat'
+					},
+					{
+						label: this.$t('live_agent'),
+						icon: 'headphones'
+					},
+					{
+						label: this.$t('app'),
+						icon: 'phone'
+					},
+					{
+						label: this.$t('more'),
+						icon: 'more-filled'
+					}
+				]
+			},
+			currentLanguage() {
+				return this.currentLang === 'km' ? 'ខ្មែរ' : 'English';
 			}
 		},
 		components: {
@@ -342,7 +364,8 @@
 		padding: 24rpx 0;
 		border-bottom: 1rpx solid #eee;
 	}
-	.market-col{
+
+	.market-col {
 		display: flex;
 		gap: 10rpx;
 	}
@@ -369,19 +392,22 @@
 		color: #9ca3af;
 		margin-left: 8rpx;
 	}
-	.volume{
+
+	.volume {
 		font-size: 20rpx;
 		color: #6b7280;
 	}
-	.price{
+
+	.price {
 		text-align: right;
 		gap: 20rpx;
 		display: flex;
 	}
+
 	.value {
 		font-weight: 700;
 	}
-	
+
 	.change {
 		font-size: 20rpx;
 		padding: 8px 20px;
@@ -389,13 +415,13 @@
 		border-radius: 8rpx;
 		font-weight: 700;
 	}
-	
+
 	.change.up {
 		background: rgba(43, 238, 121, 0.2);
 		color: #0a3a20;
 		width: 30px;
 	}
-	
+
 	.change.down {
 		background: rgba(231, 42, 8, 0.45);
 		color: #e72a08;
